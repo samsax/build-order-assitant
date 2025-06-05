@@ -62,9 +62,6 @@ export default function BuildOrderAssistant() {
             <h1 className={styles.title}>
               Build Order Assistant
             </h1>
-            <p className={styles.subtitle}>
-              Optimizado para segunda pantalla
-            </p>
           </div>
           
           {/* Timer Display */}
@@ -155,8 +152,10 @@ export default function BuildOrderAssistant() {
             <div className={styles.stepContent}>
               <div className={styles.populationInfo}>
                 <span className={styles.populationIcon}>👥</span>
-                <span className={`${styles.populationLabel} ${styles.populationLabelCurrent}`}>Población:</span>
+                <span className={`${styles.populationLabel} ${styles.populationLabelCurrent}`}>Aldeano:</span>
                 <span className={`${styles.populationValue} ${styles.populationValueCurrent}`}>{step?.pop}</span>
+                <span className={`${styles.populationLabel} ${styles.populationLabelNext}`}>Pop:</span>
+                <span className={`${styles.populationValue} ${styles.populationValueNext}`}>{ nextStep.pop +1 }</span>
               </div>
               <div className={`${styles.stepDescription} ${styles.stepDescriptionCurrent}`}>
                 {step?.description}
@@ -174,7 +173,7 @@ export default function BuildOrderAssistant() {
               <div className={styles.stepContent}>
                 <div className={styles.populationInfo}>
                   <span className={styles.populationIcon}>👥</span>
-                  <span className={`${styles.populationLabel} ${styles.populationLabelNext}`}>Población:</span>
+                  <span className={`${styles.populationLabel} ${styles.populationLabelNext}`}>Aldeano:</span>
                   <span className={`${styles.populationValue} ${styles.populationValueNext}`}>{nextStep.pop}</span>
                 </div>
                 <div className={`${styles.stepDescription} ${styles.stepDescriptionNext}`}>
