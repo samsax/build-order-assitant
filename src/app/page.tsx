@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import buildOrders from './data/buildOrders';
+import { buildOrders } from './data/buildOrders';
 import styles from './styles/BuildOrder.module.css';
+import StepCard from './components/StepCard';
 
 const STEP_DURATION = 25;
 
@@ -144,43 +145,11 @@ export default function BuildOrderAssistant() {
         {/* Right Panel - Current & Next Steps */}
         <div className={styles.rightPanel}>
           {/* Current Step */}
-          <div className={`${styles.stepCard} ${styles.currentStep}`}>
-            <div className={styles.stepHeader}>
-              <div className={`${styles.stepIndicator} ${styles.stepIndicatorCurrent}`}></div>
-              <h2 className={`${styles.stepTitle} ${styles.stepTitleCurrent}`}>PASO ACTUAL</h2>
-            </div>
-            <div className={styles.stepContent}>
-              <div className={styles.populationInfo}>
-                <span className={styles.populationIcon}>👥</span>
-                <span className={`${styles.populationLabel} ${styles.populationLabelCurrent}`}>Aldeano:</span>
-                <span className={`${styles.populationValue} ${styles.populationValueCurrent}`}>{step?.pop}</span>
-                <span className={`${styles.populationLabel} ${styles.populationLabelNext}`}>Pop:</span>
-                <span className={`${styles.populationValue} ${styles.populationValueNext}`}>{ nextStep.pop +1 }</span>
-              </div>
-              <div className={`${styles.stepDescription} ${styles.stepDescriptionCurrent}`}>
-                {step?.description}
-              </div>
-            </div>
-          </div>
+          <StepCard step={step} type="current" />
 
           {/* Next Step */}
           {nextStep && (
-            <div className={`${styles.stepCard} ${styles.nextStep}`}>
-              <div className={styles.stepHeader}>
-                <div className={`${styles.stepIndicator} ${styles.stepIndicatorNext}`}></div>
-                <h2 className={`${styles.stepTitle} ${styles.stepTitleNext}`}>PRÓXIMO PASO</h2>
-              </div>
-              <div className={styles.stepContent}>
-                <div className={styles.populationInfo}>
-                  <span className={styles.populationIcon}>👥</span>
-                  <span className={`${styles.populationLabel} ${styles.populationLabelNext}`}>Aldeano:</span>
-                  <span className={`${styles.populationValue} ${styles.populationValueNext}`}>{nextStep.pop}</span>
-                </div>
-                <div className={`${styles.stepDescription} ${styles.stepDescriptionNext}`}>
-                  {nextStep.description}
-                </div>
-              </div>
-            </div>
+            <StepCard step={nextStep} type="next" />
           )}
 
           {/* Completion Message */}
@@ -197,3 +166,4 @@ export default function BuildOrderAssistant() {
     </div>
   );
 }
+          
