@@ -1,0 +1,404 @@
+/* BuildOrder Styles */
+.container {
+  @apply h-screen w-screen bg-gray-900 text-white flex flex-col;
+}
+
+.header {
+  @apply bg-gray-800 border-b border-gray-700 px-8 py-6;
+}
+
+@screen lg {
+  .header {
+    @apply px-12 py-8;
+  }
+}
+
+.headerContent {
+  @apply flex flex-col space-y-4;
+}
+
+@screen lg {
+  .headerContent {
+    @apply flex-row items-center justify-between space-y-0;
+  }
+}
+
+.title {
+  @apply text-4xl font-bold text-blue-400;
+}
+
+@screen lg {
+  .title {
+    @apply text-6xl;
+  }
+}
+
+.subtitle {
+  @apply text-xl text-gray-300 mt-2;
+}
+
+@screen lg {
+  .subtitle {
+    @apply text-2xl;
+  }
+}
+
+.timerContainer {
+  @apply text-center;
+}
+
+@screen lg {
+  .timerContainer {
+    @apply text-right;
+  }
+}
+
+.timer {
+  @apply text-5xl font-mono font-bold text-green-400;
+}
+
+@screen lg {
+  .timer {
+    @apply text-7xl;
+  }
+}
+
+.stepCounter {
+  @apply text-xl text-gray-300;
+}
+
+@screen lg {
+  .stepCounter {
+    @apply text-2xl;
+  }
+}
+
+.mainContent {
+  @apply flex-1 flex flex-col;
+}
+
+@screen lg {
+  .mainContent {
+    @apply flex-row;
+  }
+}
+
+.leftPanel {
+  @apply w-full bg-gray-800 border-b border-gray-700 p-6 flex flex-col;
+}
+
+@screen lg {
+  .leftPanel {
+    @apply w-1/3 border-b-0 border-r p-12;
+  }
+}
+
+.buildSelection {
+  @apply mb-8;
+}
+
+@screen lg {
+  .buildSelection {
+    @apply mb-12;
+  }
+}
+
+.label {
+  @apply block text-2xl font-semibold mb-4 text-gray-200;
+}
+
+@screen lg {
+  .label {
+    @apply text-3xl mb-6;
+  }
+}
+
+.select {
+  @apply w-full bg-gray-700 border-2 border-gray-600 rounded-xl px-6 py-4 text-xl font-medium text-white focus:border-blue-400 focus:outline-none transition-colors;
+}
+
+@screen lg {
+  .select {
+    @apply px-8 py-6 text-2xl;
+  }
+}
+
+.progressContainer {
+  @apply mb-8;
+}
+
+@screen lg {
+  .progressContainer {
+    @apply mb-12;
+  }
+}
+
+.progressHeader {
+  @apply flex justify-between items-center mb-4;
+}
+
+.progressLabel {
+  @apply text-xl font-semibold text-gray-200;
+}
+
+@screen lg {
+  .progressLabel {
+    @apply text-2xl;
+  }
+}
+
+.progressValue {
+  @apply text-xl font-bold text-blue-400;
+}
+
+@screen lg {
+  .progressValue {
+    @apply text-2xl;
+  }
+}
+
+.progressBar {
+  @apply w-full bg-gray-700 rounded-full h-4;
+}
+
+@screen lg {
+  .progressBar {
+    @apply h-6;
+  }
+}
+
+.progressFill {
+  @apply h-full bg-blue-500 transition-all duration-500 ease-out rounded-full;
+}
+
+.controlsContainer {
+  @apply space-y-4 flex-1 flex flex-col justify-center;
+}
+
+@screen lg {
+  .controlsContainer {
+    @apply space-y-6;
+  }
+}
+
+.button {
+  @apply w-full py-6 px-6 rounded-2xl text-2xl font-bold transition-all duration-200 transform hover:scale-105 shadow-lg;
+}
+
+@screen lg {
+  .button {
+    @apply py-8 px-8 text-3xl;
+  }
+}
+
+.buttonStart {
+  @apply bg-green-600 hover:bg-green-700;
+}
+
+.buttonPause {
+  @apply bg-red-600 hover:bg-red-700;
+}
+
+.buttonNext {
+  @apply bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed;
+}
+
+.buttonNext:disabled {
+  @apply hover:scale-100;
+}
+
+.buttonReset {
+  @apply bg-gray-600 hover:bg-gray-700;
+}
+
+.rightPanel {
+  @apply flex-1 p-6 flex flex-col justify-center space-y-8;
+}
+
+@screen lg {
+  .rightPanel {
+    @apply p-12 space-y-12;
+  }
+}
+
+.stepCard {
+  @apply rounded-2xl p-8 border-l-8;
+}
+
+@screen lg {
+  .stepCard {
+    @apply p-12;
+  }
+}
+
+.currentStep {
+  @apply bg-green-900 bg-opacity-30 border-green-400;
+}
+
+.nextStep {
+  @apply bg-blue-900 bg-opacity-30 border-blue-400;
+}
+
+.completedStep {
+  @apply bg-yellow-900 bg-opacity-30 border-yellow-400;
+}
+
+.stepHeader {
+  @apply flex items-center mb-6;
+}
+
+@screen lg {
+  .stepHeader {
+    @apply mb-8;
+  }
+}
+
+.stepIndicator {
+  @apply w-4 h-4 rounded-full mr-4;
+}
+
+@screen lg {
+  .stepIndicator {
+    @apply w-6 h-6 mr-6;
+  }
+}
+
+.stepIndicatorCurrent {
+  @apply bg-green-400 animate-pulse;
+}
+
+.stepIndicatorNext {
+  @apply bg-blue-400;
+}
+
+.stepTitle {
+  @apply text-3xl font-bold;
+}
+
+@screen lg {
+  .stepTitle {
+    @apply text-4xl;
+  }
+}
+
+.stepTitleCurrent {
+  @apply text-green-400;
+}
+
+.stepTitleNext {
+  @apply text-blue-400;
+}
+
+.stepContent {
+  @apply space-y-4;
+}
+
+@screen lg {
+  .stepContent {
+    @apply space-y-6;
+  }
+}
+
+.populationInfo {
+  @apply flex items-center space-x-4;
+}
+
+@screen lg {
+  .populationInfo {
+    @apply space-x-6;
+  }
+}
+
+.populationIcon {
+  @apply text-2xl;
+}
+
+@screen lg {
+  .populationIcon {
+    @apply text-3xl;
+  }
+}
+
+.populationLabel {
+  @apply text-2xl font-semibold;
+}
+
+@screen lg {
+  .populationLabel {
+    @apply text-3xl;
+  }
+}
+
+.populationLabelCurrent {
+  @apply text-gray-200;
+}
+
+.populationLabelNext {
+  @apply text-gray-300;
+}
+
+.populationValue {
+  @apply text-4xl font-bold;
+}
+
+@screen lg {
+  .populationValue {
+    @apply text-5xl;
+  }
+}
+
+.populationValueCurrent {
+  @apply text-white;
+}
+
+.populationValueNext {
+  @apply text-gray-200;
+}
+
+.stepDescription {
+  @apply font-bold leading-tight;
+}
+
+.stepDescriptionCurrent {
+  @apply text-3xl text-white;
+}
+
+@screen lg {
+  .stepDescriptionCurrent {
+    @apply text-5xl;
+  }
+}
+
+.stepDescriptionNext {
+  @apply text-2xl text-gray-200;
+}
+
+@screen lg {
+  .stepDescriptionNext {
+    @apply text-4xl;
+  }
+}
+
+.completionMessage {
+  @apply flex items-center justify-center;
+}
+
+.completionIcon {
+  @apply text-4xl mr-4;
+}
+
+@screen lg {
+  .completionIcon {
+    @apply text-6xl mr-6;
+  }
+}
+
+.completionText {
+  @apply text-3xl font-bold text-yellow-400;
+}
+
+@screen lg {
+  .completionText {
+    @apply text-5xl;
+  }
+}
