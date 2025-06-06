@@ -4,10 +4,23 @@ import { useState, useEffect } from 'react';
 import { buildOrders } from './data/buildOrders';
 import styles from './styles/BuildOrder.module.css';
 import StepCard from './components/StepCard';
+import Controls from './components/Controls';
 
 const STEP_DURATION = 25;
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 600);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  return isMobile;
+}
+
 export default function BuildOrderAssistant() {
+  const isMobile = useIsMobile();
   const [selected, setSelected] = useState('scouts');
   const [stepIndex, setStepIndex] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -57,25 +70,25 @@ export default function BuildOrderAssistant() {
   return (
     <div className={styles.container}>
       {/* Header */}
-      <div className={styles.header}>
-        <div className={styles.headerContent}>
-          <div>
-            <h1 className={styles.title}>
-              Build Order Assistant
-            </h1>
-          </div>
-          
-          {/* Timer Display */}
-          <div className={styles.timerContainer}>
-            <div className={styles.timer}>
-              {formatTime(seconds)}
+      {!isMobile && (
+        <div className={styles.header}>
+          <div className={styles.headerContent}>
+            <div>
+              <h1 className={styles.title}>
+                Build Order Assistant
+              </h1>
             </div>
-            <div className={styles.stepCounter}>
-              Paso {stepIndex + 1} de {build.steps.length}
+            <div className={styles.timerContainer}>
+              <div className={styles.timer}>
+                {formatTime(seconds)}
+              </div>
+              <div className={styles.stepCounter}>
+                Paso {stepIndex + 1} de {build.steps.length}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Content */}
       <div className={styles.mainContent}>
@@ -102,44 +115,33 @@ export default function BuildOrderAssistant() {
             </select>
           </div>
 
-          {/* Progress Bar */}
-          <div className={styles.progressContainer}>
-            <div className={styles.progressHeader}>
-              <span className={styles.progressLabel}>Progreso</span>
-              <span className={styles.progressValue}>{Math.round(progress)}%</span>
-            </div>
-            <div className={styles.progressBar}>
-              <div 
-                className={styles.progressFill}
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-
           {/* Control Buttons */}
-          <div className={styles.controlsContainer}>
-            <button
-              onClick={() => setIsRunning(!isRunning)}
-              className={`${styles.button} ${isRunning ? styles.buttonPause : styles.buttonStart}`}
-            >
-              {isRunning ? '⏸️ PAUSAR' : '▶️ INICIAR'}
-            </button>
-            
-            <button
-              onClick={handleNext}
-              disabled={stepIndex >= build.steps.length - 1}
-              className={`${styles.button} ${styles.buttonNext}`}
-            >
-              ⏭️ SIGUIENTE
-            </button>
-            
-            <button
-              onClick={handleReset}
-              className={`${styles.button} ${styles.buttonReset}`}
-            >
-              🔄 REINICIAR
-            </button>
-          </div>
+          <Controls
+            isRunning={isRunning}
+            isMobile={isMobile}
+            stepIndex={stepIndex}
+            build={build}
+            onStart={() => setIsRunning(true)}
+            onPause={() => setIsRunning(false)}
+            onNext={handleNext}
+            onReset={handleReset}
+          />
+
+          {/* Progress Bar (solo desktop) */}
+          {!isMobile && (
+            <div className={styles.progressContainer}>
+              <div className={styles.progressHeader}>
+                <span className={styles.progressLabel}>Progreso</span>
+                <span className={styles.progressValue}>{Math.round(progress)}%</span>
+              </div>
+              <div className={styles.progressBar}>
+                <div 
+                  className={styles.progressFill}
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right Panel - Current & Next Steps */}
@@ -147,8 +149,8 @@ export default function BuildOrderAssistant() {
           {/* Current Step */}
           <StepCard step={step} type="current" />
 
-          {/* Next Step */}
-          {nextStep && (
+          {/* Next Step (solo desktop) */}
+          {!isMobile && nextStep && (
             <StepCard step={nextStep} type="next" />
           )}
 
@@ -166,4 +168,3 @@ export default function BuildOrderAssistant() {
     </div>
   );
 }
-          

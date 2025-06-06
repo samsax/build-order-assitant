@@ -31,6 +31,7 @@ const StepCard: React.FC<StepCardProps> = ({ step, type }) => {
                 ${stepCardClass}
                 ${resourceCardClass}
                 ${styles.stepCard}
+                ${styles.stepCardResponsive} {/* Nueva clase para mobile */}
             `}
         >
             <div className={styles.stepHeader}>
