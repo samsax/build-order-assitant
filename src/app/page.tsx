@@ -30,13 +30,20 @@ export default function BuildOrderAssistant() {
   const step = build.steps[stepIndex];
   const nextStep = build.steps[stepIndex + 1];
 
+  // Use the current step's duration if available, otherwise fallback to STEP_DURATION
+  const getStepDuration = (index: number) => {
+    const step = build.steps[index];
+    return step && typeof step.duration === 'number' ? step.duration : STEP_DURATION;
+  };
+
   useEffect(() => {
     if (!isRunning) return;
 
     const interval = setInterval(() => {
       setSeconds((prev) => {
         const next = prev + 1;
-        if (next % STEP_DURATION === 0 && stepIndex < build.steps.length - 1) {
+        const duration = getStepDuration(stepIndex);
+        if (next % duration === 0 && stepIndex < build.steps.length - 1) {
           setStepIndex((i) => i + 1);
         }
         return next;
@@ -55,7 +62,7 @@ export default function BuildOrderAssistant() {
   const handleNext = () => {
     if (stepIndex < build.steps.length - 1) {
       setStepIndex((prev) => prev + 1);
-      setSeconds((prev) => prev + STEP_DURATION);
+      setSeconds((prev) => prev + getStepDuration(stepIndex));
     }
   };
 
