@@ -203,7 +203,7 @@ export default function BuildOrderAssistant() {
             <div className={`${styles.stepCard} ${styles.completedStep}`}>
               <div className={styles.completionMessage}>
                 <span className={styles.completionIcon}>🎉</span>
-                <h2 className={styles.completionText}>¡BUILD COMPLETADO!</h2>
+                <h2 className={styles.completionText}>¡BUILD ORDER COMPLETADO!</h2>
               </div>
             </div>
           )}
