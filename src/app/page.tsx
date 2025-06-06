@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { buildOrders } from './data/buildOrders';
 import styles from './styles/BuildOrder.module.css';
 import StepCard from './components/StepCard';
-import Controls from './components/Controls';
 
 const STEP_DURATION = 25;
 
@@ -30,20 +29,13 @@ export default function BuildOrderAssistant() {
   const step = build.steps[stepIndex];
   const nextStep = build.steps[stepIndex + 1];
 
-  // Use the current step's duration if available, otherwise fallback to STEP_DURATION
-  const getStepDuration = (index: number) => {
-    const step = build.steps[index];
-    return step && typeof step.duration === 'number' ? step.duration : STEP_DURATION;
-  };
-
   useEffect(() => {
     if (!isRunning) return;
 
     const interval = setInterval(() => {
       setSeconds((prev) => {
         const next = prev + 1;
-        const duration = getStepDuration(stepIndex);
-        if (next % duration === 0 && stepIndex < build.steps.length - 1) {
+        if (next % STEP_DURATION === 0 && stepIndex < build.steps.length - 1) {
           setStepIndex((i) => i + 1);
         }
         return next;
@@ -62,7 +54,7 @@ export default function BuildOrderAssistant() {
   const handleNext = () => {
     if (stepIndex < build.steps.length - 1) {
       setStepIndex((prev) => prev + 1);
-      setSeconds((prev) => prev + getStepDuration(stepIndex));
+      setSeconds((prev) => prev + STEP_DURATION);
     }
   };
 
@@ -122,17 +114,62 @@ export default function BuildOrderAssistant() {
             </select>
           </div>
 
-          {/* Control Buttons */}
-          <Controls
-            isRunning={isRunning}
-            isMobile={isMobile}
-            stepIndex={stepIndex}
-            build={build}
-            onStart={() => setIsRunning(true)}
-            onPause={() => setIsRunning(false)}
-            onNext={handleNext}
-            onReset={handleReset}
-          />
+            {/* Control Buttons */}
+            <div
+              className={`${styles.controlsContainer} ${isMobile ? styles.controlsRow : ''}`}
+              style={
+              isMobile
+                ? {
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: '8px',
+                  justifyContent: 'center',
+                  width: 'auto',
+                  maxWidth: '100%',
+                  flexWrap: 'wrap',
+                }
+                : { width: '100%', maxWidth: 320, margin: '0 auto' }
+              }
+            >
+              {!isRunning ? (
+              <button
+                onClick={() => setIsRunning(true)}
+                className={`${styles.button} ${styles.buttonStart}`}
+                aria-label="Iniciar"
+                style={{ flex: isMobile ? '1 1 auto' : undefined, maxWidth: isMobile ? 80 : undefined }}
+              >
+                ▶️{!isMobile && ' INICIAR'}
+              </button>
+              ) : (
+              <>
+                <button
+                onClick={() => setIsRunning(false)}
+                className={`${styles.button} ${styles.buttonPause}`}
+                aria-label="Pausar"
+                style={{ flex: isMobile ? '1 1 auto' : undefined, maxWidth: isMobile ? 80 : undefined }}
+                >
+                ⏸️{!isMobile && ' PAUSAR'}
+                </button>
+                <button
+                onClick={handleNext}
+                disabled={stepIndex >= build.steps.length - 1}
+                className={`${styles.button} ${styles.buttonNext}`}
+                aria-label="Siguiente"
+                style={{ flex: isMobile ? '1 1 auto' : undefined, maxWidth: isMobile ? 80 : undefined }}
+                >
+                ⏭️{!isMobile && ' SIGUIENTE'}
+                </button>
+                <button
+                onClick={handleReset}
+                className={`${styles.button} ${styles.buttonReset}`}
+                aria-label="Reiniciar"
+                style={{ flex: isMobile ? '1 1 auto' : undefined, maxWidth: isMobile ? 80 : undefined }}
+                >
+                🔄{!isMobile && ' REINICIAR'}
+                </button>
+              </>
+              )}
+            </div>
 
           {/* Progress Bar (solo desktop) */}
           {!isMobile && (
