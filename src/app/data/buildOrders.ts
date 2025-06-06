@@ -287,7 +287,7 @@ const buildOrders: Record<string, BuildOrder> = {
         pop: 13,
         villager: 12,
         description:
-          "Aldeano 12 construye casa y luego va a bayas (construir molino)",
+          "Aldeano 12 construye casa y luego va a bayas (construye molino)",
         type: "build",
         resource: "food",
         duration: 60,
@@ -920,6 +920,105 @@ const buildOrders: Record<string, BuildOrder> = {
         description:
           "Al llegar a Feudal, investiga Collera y Hacha de Doble Filo. Añade un segundo Muelle si es seguro.",
         type: "research",
+      },
+    ],
+  },
+  waterHybrid: {
+    name: "Apertura Híbrida Agua-Tierra",
+    steps: [
+      {
+        pop: 7,
+        villager: 6,
+        description: "6 aldeanos a las ovejas",
+        type: "villager",
+        resource: "food",
+      },
+      {
+        pop: 11,
+        villager: 10,
+        description: "4 a madera",
+        type: "villager",
+        resource: "wood",
+      },
+      {
+        pop: 12,
+        villager: 11,
+        description: "1 caza primer jabalí",
+        type: "gather",
+        resource: "food",
+      },
+      {
+        pop: 13,
+        villager: 12,
+        description:
+          "1 construye casa, luego muelle y queda pescando junto al muelle",
+        type: "build",
+        resource: "food",
+      },
+      {
+        pop: 14,
+        villager: 13,
+        description: "1 más a madera",
+        type: "villager",
+        resource: "wood",
+      },
+      {
+        pop: 14,
+        villager: 13,
+        description: "Apenas se termine el muelle, construir un pesquero",
+        type: "build",
+        resource: "food",
+      },
+      {
+        pop: 15,
+        villager: 14,
+        description: "1 construye casa y luego caza segundo jabalí",
+        type: "build",
+        resource: "food",
+      },
+      {
+        pop: 20,
+        villager: 19,
+        description: "5 más a comida",
+        type: "villager",
+        resource: "food",
+      },
+      {
+        pop: 22,
+        villager: 21,
+        description: "2 más a madera",
+        type: "villager",
+        resource: "wood",
+      },
+      {
+        pop: 22,
+        villager: 21,
+        description:
+          "Hacer el Telar en el Centro Urbano (solo si estás conectado por tierra a tu oponente)",
+        type: "research",
+      },
+      {
+        pop: 25,
+        villager: 24,
+        description:
+          "Avanzar a Edad Feudal (con 25-26 de población, incluyendo 3-4 Barcos Pesqueros)",
+        type: "age",
+      },
+      {
+        pop: 25,
+        villager: 24,
+        description:
+          "Mientras avanzas, construye un nuevo Campamento Maderero con aldeanos y envía algunos de las ovejas (5 aldeanos en cada uno es ideal). Deja un aldeano cerca del Centro Urbano (ovejas/jabalí o en madera)",
+        type: "build",
+        resource: "wood",
+      },
+      {
+        pop: 29,
+        villager: 28,
+        description:
+          "Recolecta oro con 4 aldeanos, construye un segundo muelle y cierra tu base en tierra",
+        type: "build",
+        resource: "gold",
       },
     ],
   },
