@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { buildOrders } from "./data/buildOrders";
 import styles from "./styles/BuildOrder.module.css";
 import StepCard from "./components/StepCard";
+import { useBuildTimer } from "./hooks/useBuildTimer";
 
 const STEP_DURATION = 25;
 const GAME_SPEED = 1.7;
@@ -22,8 +23,10 @@ function useIsMobile() {
 
 export default function BuildOrderAssistant() {
   const isMobile = useIsMobile();
-  const [selected, setSelected] = useState("scouts");
+  const defaultBuildKey = Object.keys(buildOrders)[0] || "";
+  const [selected, setSelected] = useState(defaultBuildKey);
   const [stepIndex, setStepIndex] = useState(0);
+  const [stepStartTime, setStepStartTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [seconds, setSeconds] = useState(0);
 
@@ -31,32 +34,24 @@ export default function BuildOrderAssistant() {
   const step = build.steps[stepIndex];
   const nextStep = build.steps[stepIndex + 1];
 
-  useEffect(() => {
-    if (!isRunning) return;
-
-    const interval = setInterval(() => {
-      setSeconds((prev) => {
-        const next = prev + 1;
-        if (next % STEP_DURATION === 0 && stepIndex < build.steps.length - 1) {
-          setStepIndex((i) => i + 1);
-        }
-        return next;
-      });
-    }, TICK_INTERVAL_MS);
-
-    return () => clearInterval(interval);
-  }, [isRunning, stepIndex, build.steps.length]);
-
   const handleReset = () => {
     setStepIndex(0);
     setSeconds(0);
     setIsRunning(false);
+    setStepStartTime(0);
   };
 
   const handleNext = () => {
     if (stepIndex < build.steps.length - 1) {
       setStepIndex((prev) => prev + 1);
-      setSeconds((prev) => prev + STEP_DURATION);
+      setStepStartTime(seconds);
+    }
+  };
+
+  const handlePrev = () => {
+    if (stepIndex > 0) {
+      setStepIndex((prev) => prev - 1);
+      setStepStartTime(seconds);
     }
   };
 
@@ -68,8 +63,50 @@ export default function BuildOrderAssistant() {
 
   const progress = ((stepIndex + 1) / build.steps.length) * 100;
 
+  useEffect(() => {
+  if (!window.electron) return;
+
+  window.electron.on("start-build-order", () => {
+    setIsRunning(true);
+  });
+
+  window.electron.on("pause-build-order", () => {
+    setIsRunning(false);
+  });
+
+  window.electron.on("next-step", () => {
+    handleNext();
+  });
+
+  window.electron.on("reset-build-order", () => {
+    handleReset();
+  });
+}, []);
+
+  useBuildTimer(
+    isRunning,
+    () => {
+      setSeconds((prevSeconds) => {
+        const nextSeconds = prevSeconds + 1;
+        const currentStepDuration = step?.duration ?? STEP_DURATION;
+
+        if (
+          nextSeconds - stepStartTime >= currentStepDuration &&
+          stepIndex < build.steps.length - 1
+        ) {
+          setStepIndex((i) => i + 1);
+          setStepStartTime(nextSeconds);
+        }
+
+        return nextSeconds;
+      });
+    },
+    TICK_INTERVAL_MS
+  );
+
   return (
     <div className={styles.container}>
+      <div className="drag-bar" />
       {/* Header */}
       {!isMobile && (
         <div className={styles.header}>
@@ -77,6 +114,12 @@ export default function BuildOrderAssistant() {
             <div>
               <h1 className={styles.title}>Build Order Assistant</h1>
             </div>
+            {isMobile && (
+              <div className={styles.mobileTimer}>
+                ⏱️ {formatTime(seconds)} | Paso {stepIndex + 1}/
+                {build.steps.length}
+              </div>
+            )}
             <div className={styles.timerContainer}>
               <div className={styles.timer}>{formatTime(seconds)}</div>
               <div className={styles.stepCounter}>
@@ -98,8 +141,12 @@ export default function BuildOrderAssistant() {
               className={styles.select}
               value={selected}
               onChange={(e) => {
-                setSelected(e.target.value);
-                handleReset();
+                const newBuild = e.target.value;
+                setSelected(newBuild);
+                setStepIndex(0);
+                setSeconds(0);
+                setIsRunning(false);
+                setStepStartTime(0);
               }}
             >
               {Object.entries(buildOrders).map(([key, value]) => (
@@ -159,9 +206,21 @@ export default function BuildOrderAssistant() {
                   ⏸️{!isMobile && " PAUSAR"}
                 </button>
                 <button
+                  onClick={handlePrev}
+                  disabled={stepIndex === 0}
+                  className={`${styles.button} ${styles.buttonControl}`}
+                  aria-label="Anterior"
+                  style={{
+                    flex: isMobile ? "1 1 auto" : undefined,
+                    maxWidth: isMobile ? 80 : undefined,
+                  }}
+                >
+                  ⏮️{!isMobile && " ANTERIOR"}
+                </button>
+                <button
                   onClick={handleNext}
                   disabled={stepIndex >= build.steps.length - 1}
-                  className={`${styles.button} ${styles.buttonNext}`}
+                  className={`${styles.button} ${styles.buttonControl}`}
                   aria-label="Siguiente"
                   style={{
                     flex: isMobile ? "1 1 auto" : undefined,
@@ -209,11 +268,10 @@ export default function BuildOrderAssistant() {
           {/* Current Step */}
           <StepCard step={step} type="current" />
 
-          {/* Next Step (solo desktop) */}
-          {!isMobile && nextStep && <StepCard step={nextStep} type="next" />}
+          {nextStep && <StepCard step={nextStep} type="next" />}
 
           {/* Completion Message */}
-          {stepIndex >= build.steps.length - 1 && (
+          {stepIndex === build.steps.length - 1 && !isRunning && (
             <div className={`${styles.stepCard} ${styles.completedStep}`}>
               <div className={styles.completionMessage}>
                 <span className={styles.completionIcon}>🎉</span>
